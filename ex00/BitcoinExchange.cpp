@@ -17,7 +17,7 @@ BitcoinExchange::BitcoinExchange(const char* file_name, const char* del) {
   std::string buf;
   std::string tmp1;
   std::string tmp2;
-  std::tm tmp_key;
+  CustomTm tmp_key;
   float tmp_value;
   std::stringstream str_to_float;
   std::size_t del_pos;
@@ -50,29 +50,35 @@ BitcoinExchange::BitcoinExchange(const char* file_name, const char* del) {
         tmp1 = buf.substr(0, del_pos);
         tmp2 = buf.substr(del_pos + del_len);
         if (tmp1.length() != 0 && tmp2.length() != 0) {
+          if (strptime(tmp1.c_str(), "%Y-%m-%d", &tmp_key) == NULL) {
+            continue;
+          }
           str_to_float.clear();
           str_to_float << tmp2;
           str_to_float >> tmp_value;
           if (str_to_float.fail()) {
             continue;
           }
-          if (strptime(tmp1.c_str(), "%Y-%m-%d", &tmp_key) == NULL) {
-            continue;
-          }
+          data.insert(std::make_pair(tmp_key, tmp_value));
         }
       }
     }
   }
-  if (file_read.fail()) {
-    file_read.close();
-    throw std::invalid_argument("Error while read file!");
-  } else if (file_read.eof()) {
+  if (file_read.eof()) {
     std::cout << "File " << file_name << " done\n";
     file_read.close();
+  } else if (file_read.fail()) {
+    file_read.close();
+    throw std::invalid_argument("Error while read file!");
   }
 
   if (data.size() == 0) {
     throw std::invalid_argument("Empty file!");
+  }
+
+  std::map<CustomTm, float>::iterator it = data.begin();
+  for (; it != data.end(); it++) {
+    std::cout << it->first << it->second << '\n';
   }
 }
 
