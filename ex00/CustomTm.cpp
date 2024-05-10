@@ -42,13 +42,13 @@ bool CustomTm::operator>=(const CustomTm& comp) const {
 bool CustomTm::operator<(const CustomTm& comp) const {
   if (this->tm_year < comp.tm_year) {
     return true;
-  } else if (this->tm_year < comp.tm_year) {
+  } else if (this->tm_year > comp.tm_year) {
     return false;
   }
 
   if (this->tm_mon < comp.tm_mon) {
     return true;
-  } else if (this->tm_mon < comp.tm_mon) {
+  } else if (this->tm_mon > comp.tm_mon) {
     return false;
   }
 
@@ -62,13 +62,13 @@ bool CustomTm::operator<(const CustomTm& comp) const {
 bool CustomTm::operator<=(const CustomTm& comp) const {
   if (this->tm_year < comp.tm_year) {
     return true;
-  } else if (this->tm_year < comp.tm_year) {
+  } else if (this->tm_year > comp.tm_year) {
     return false;
   }
 
   if (this->tm_mon < comp.tm_mon) {
     return true;
-  } else if (this->tm_mon < comp.tm_mon) {
+  } else if (this->tm_mon > comp.tm_mon) {
     return false;
   }
 
@@ -98,8 +98,6 @@ bool CustomTm::operator!=(const CustomTm& comp) const {
 }
 
 std::ostream& operator<<(std::ostream& out, const CustomTm& obj) {
-  out << "Year : " << obj.tm_yday << '\n'
-      << "Month : " << obj.tm_mon << '\n'
-      << "Day : " << obj.tm_mday << '\n';
+  out << (obj.tm_year + 1900) << '-' << (obj.tm_mon + 1) << '-' << obj.tm_mday ;
   return out;
 }

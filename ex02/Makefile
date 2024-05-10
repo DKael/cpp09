@@ -1,6 +1,4 @@
-SRCS =	main.cpp \
-		BitcoinExchange.cpp\
-		CustomTm.cpp
+SRCS =	main.cpp
 
 OBJDIR=obj
 

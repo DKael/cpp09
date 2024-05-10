@@ -19,6 +19,12 @@ class BitcoinExchange {
   ~BitcoinExchange();
   BitcoinExchange(const BitcoinExchange& origin);
   BitcoinExchange& operator=(const BitcoinExchange& origin);
+
+  std::map<CustomTm, float>::iterator begin(void);
+  std::map<CustomTm, float>::iterator end(void);
+  const std::map<CustomTm, float>& get_data(void) const;
+  std::map<CustomTm, float>::const_iterator find_closest_lower_date(
+      const CustomTm& input);
 };
 
 #endif
