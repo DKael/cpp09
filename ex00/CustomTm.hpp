@@ -7,6 +7,10 @@
 class CustomTm : public std::tm {
  private:
  public:
+  CustomTm();
+  ~CustomTm();
+  CustomTm(const CustomTm& origin);
+  CustomTm& operator=(const CustomTm& origin);
   bool operator>(const CustomTm& comp) const;
   bool operator>=(const CustomTm& comp) const;
   bool operator<(const CustomTm& comp) const;

@@ -65,7 +65,6 @@ BitcoinExchange::BitcoinExchange(const char* file_name, const char* del) {
     }
   }
   if (file_read.eof()) {
-    // std::cout << "File " << file_name << " read done\n";
     file_read.close();
   } else if (file_read.fail()) {
     file_read.close();
@@ -108,14 +107,10 @@ std::map<CustomTm, float>::const_iterator
 BitcoinExchange::find_closest_lower_date(const CustomTm& input) {
   std::map<CustomTm, float>::const_iterator tmp_it;
 
-  tmp_it = data.lower_bound(input);
+  tmp_it = data.upper_bound(input);
   if (tmp_it != data.begin()) {
-    if (tmp_it->first == input) {
-      return tmp_it;
-    } else {
-      tmp_it--;
-      return tmp_it;
-    }
+    tmp_it--;
+    return tmp_it;
   } else {
     return data.end();
   }

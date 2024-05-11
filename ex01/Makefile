@@ -23,6 +23,7 @@ all : ${NAME}
 
 clean:
 	rm -f ${OBJS}
+	rm -rf ${OBJDIR}
 
 fclean:
 	make clean
