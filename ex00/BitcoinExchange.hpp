@@ -14,7 +14,7 @@ class BitcoinExchange {
   std::map<CustomTm, float> data;
 
  public:
-  BitcoinExchange(const char* file_name, const char* del);
+  BitcoinExchange(const char* file_name, const std::string del);
   BitcoinExchange();
   ~BitcoinExchange();
   BitcoinExchange(const BitcoinExchange& origin);

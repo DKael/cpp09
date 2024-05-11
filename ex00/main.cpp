@@ -80,6 +80,10 @@ int main(int argc, char** argv) {
         std::cout << "Error: bad input => " << date_str << '\n';
         continue;
       }
+      if (date_tm.chk_valid() == false) {
+        std::cout << "Error: bad input => " << date_str << '\n';
+        continue;
+      }
       str_to_float << value_str;
       str_to_float >> value_float;
       if (str_to_float.fail()) {

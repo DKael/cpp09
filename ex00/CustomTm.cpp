@@ -1,54 +1,92 @@
 #include "CustomTm.hpp"
 
-CustomTm::CustomTm() { ; }
+CustomTm::CustomTm() {
+  tm_sec = 0;
+  tm_min = 0;
+  tm_hour = 0;
+  tm_mday = 0;
+  tm_mon = 0;
+  tm_year = 0;
+  tm_wday = 0;
+  tm_yday = 0;
+  tm_isdst = 0;
+  tm_gmtoff = 0;
+  tm_zone = 0;
+}
 
 CustomTm::~CustomTm() { ; }
 
 CustomTm::CustomTm(const CustomTm& origin) {
-  this->tm_sec = origin.tm_sec;		
-	this->tm_min = origin.tm_min;		
-	this->tm_hour = origin.tm_hour;	
-	this->tm_mday = origin.tm_mday;	
-	this->tm_mon = origin.tm_mon;		
-	this->tm_year = origin.tm_year;	
-	this->tm_wday = origin.tm_wday;	
-	this->tm_yday = origin.tm_yday;
-	this->tm_isdst = origin.tm_isdst;
-  this->tm_gmtoff = origin.tm_gmtoff;
-  this->tm_zone = origin.tm_zone;
+  tm_sec = origin.tm_sec;
+  tm_min = origin.tm_min;
+  tm_hour = origin.tm_hour;
+  tm_mday = origin.tm_mday;
+  tm_mon = origin.tm_mon;
+  tm_year = origin.tm_year;
+  tm_wday = origin.tm_wday;
+  tm_yday = origin.tm_yday;
+  tm_isdst = origin.tm_isdst;
+  tm_gmtoff = origin.tm_gmtoff;
+  tm_zone = origin.tm_zone;
 }
 
 CustomTm& CustomTm::operator=(const CustomTm& origin) {
   if (this != &origin) {
-    this->tm_sec = origin.tm_sec;		
-    this->tm_min = origin.tm_min;		
-    this->tm_hour = origin.tm_hour;	
-    this->tm_mday = origin.tm_mday;	
-    this->tm_mon = origin.tm_mon;		
-    this->tm_year = origin.tm_year;	
-    this->tm_wday = origin.tm_wday;	
-    this->tm_yday = origin.tm_yday;	
-    this->tm_isdst = origin.tm_isdst;
-    this->tm_gmtoff = origin.tm_gmtoff;
-    this->tm_zone = origin.tm_zone;
+    tm_sec = origin.tm_sec;
+    tm_min = origin.tm_min;
+    tm_hour = origin.tm_hour;
+    tm_mday = origin.tm_mday;
+    tm_mon = origin.tm_mon;
+    tm_year = origin.tm_year;
+    tm_wday = origin.tm_wday;
+    tm_yday = origin.tm_yday;
+    tm_isdst = origin.tm_isdst;
+    tm_gmtoff = origin.tm_gmtoff;
+    tm_zone = origin.tm_zone;
   }
   return *this;
 }
 
+bool CustomTm::chk_valid(void) {
+  if (tm_mon == 3 || tm_mon == 5 || tm_mon == 8 || tm_mon == 10) {
+    if (tm_mday > 30 || tm_mday < 1) {
+      return false;
+    } else {
+      return true;
+    }
+  } else if (tm_mon == 1) {
+    int leap_year_offset =
+        (((tm_year % 4 == 0) && (tm_year % 100 != 0)) || (tm_year % 400 == 0))
+            ? 1
+            : 0;
+    if (tm_mday > 28 + leap_year_offset || tm_mday < 1) {
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    if (tm_mday > 31 || tm_mday < 1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+}
+
 bool CustomTm::operator>(const CustomTm& comp) const {
-  if (this->tm_year > comp.tm_year) {
+  if (tm_year > comp.tm_year) {
     return true;
-  } else if (this->tm_year < comp.tm_year) {
+  } else if (tm_year < comp.tm_year) {
     return false;
   }
 
-  if (this->tm_mon > comp.tm_mon) {
+  if (tm_mon > comp.tm_mon) {
     return true;
-  } else if (this->tm_mon < comp.tm_mon) {
+  } else if (tm_mon < comp.tm_mon) {
     return false;
   }
 
-  if (this->tm_mday > comp.tm_mday) {
+  if (tm_mday > comp.tm_mday) {
     return true;
   } else {
     return false;
@@ -56,38 +94,38 @@ bool CustomTm::operator>(const CustomTm& comp) const {
 }
 
 bool CustomTm::operator>=(const CustomTm& comp) const {
-  if (this->tm_year > comp.tm_year) {
+  if (tm_year > comp.tm_year) {
     return true;
-  } else if (this->tm_year < comp.tm_year) {
+  } else if (tm_year < comp.tm_year) {
     return false;
   }
 
-  if (this->tm_mon > comp.tm_mon) {
+  if (tm_mon > comp.tm_mon) {
     return true;
-  } else if (this->tm_mon < comp.tm_mon) {
+  } else if (tm_mon < comp.tm_mon) {
     return false;
   }
 
-  if (this->tm_mday >= comp.tm_mday) {
+  if (tm_mday >= comp.tm_mday) {
     return true;
   } else {
     return false;
   }
 }
 bool CustomTm::operator<(const CustomTm& comp) const {
-  if (this->tm_year < comp.tm_year) {
+  if (tm_year < comp.tm_year) {
     return true;
-  } else if (this->tm_year > comp.tm_year) {
+  } else if (tm_year > comp.tm_year) {
     return false;
   }
 
-  if (this->tm_mon < comp.tm_mon) {
+  if (tm_mon < comp.tm_mon) {
     return true;
-  } else if (this->tm_mon > comp.tm_mon) {
+  } else if (tm_mon > comp.tm_mon) {
     return false;
   }
 
-  if (this->tm_mday < comp.tm_mday) {
+  if (tm_mday < comp.tm_mday) {
     return true;
   } else {
     return false;
@@ -95,19 +133,19 @@ bool CustomTm::operator<(const CustomTm& comp) const {
 }
 
 bool CustomTm::operator<=(const CustomTm& comp) const {
-  if (this->tm_year < comp.tm_year) {
+  if (tm_year < comp.tm_year) {
     return true;
-  } else if (this->tm_year > comp.tm_year) {
+  } else if (tm_year > comp.tm_year) {
     return false;
   }
 
-  if (this->tm_mon < comp.tm_mon) {
+  if (tm_mon < comp.tm_mon) {
     return true;
-  } else if (this->tm_mon > comp.tm_mon) {
+  } else if (tm_mon > comp.tm_mon) {
     return false;
   }
 
-  if (this->tm_mday <= comp.tm_mday) {
+  if (tm_mday <= comp.tm_mday) {
     return true;
   } else {
     return false;
@@ -115,8 +153,8 @@ bool CustomTm::operator<=(const CustomTm& comp) const {
 }
 
 bool CustomTm::operator==(const CustomTm& comp) const {
-  if (this->tm_year == comp.tm_year && this->tm_mon == comp.tm_mon &&
-      this->tm_mday == comp.tm_mday) {
+  if (tm_year == comp.tm_year && tm_mon == comp.tm_mon &&
+      tm_mday == comp.tm_mday) {
     return true;
   } else {
     return false;
@@ -124,8 +162,8 @@ bool CustomTm::operator==(const CustomTm& comp) const {
 }
 
 bool CustomTm::operator!=(const CustomTm& comp) const {
-  if (this->tm_year != comp.tm_year || this->tm_mon != comp.tm_mon ||
-      this->tm_mday != comp.tm_mday) {
+  if (tm_year != comp.tm_year || tm_mon != comp.tm_mon ||
+      tm_mday != comp.tm_mday) {
     return true;
   } else {
     return false;

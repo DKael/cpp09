@@ -1,6 +1,6 @@
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange(const char* file_name, const char* del) {
+BitcoinExchange::BitcoinExchange(const char* file_name, const std::string del) {
   std::ifstream file_read("data.csv");
   if (file_read.is_open() == false) {
     throw std::invalid_argument("Error: cannot open file.");
@@ -21,7 +21,7 @@ BitcoinExchange::BitcoinExchange(const char* file_name, const char* del) {
   float tmp_value;
   std::stringstream str_to_float;
   std::size_t del_pos;
-  std::size_t del_len = std::strlen(del);
+  std::size_t del_len = del.length();
 
   if (!getline(file_read, buf)) {
     file_read.close();
@@ -51,6 +51,9 @@ BitcoinExchange::BitcoinExchange(const char* file_name, const char* del) {
         tmp2 = buf.substr(del_pos + del_len);
         if (tmp1.length() != 0 && tmp2.length() != 0) {
           if (strptime(tmp1.c_str(), "%Y-%m-%d", &tmp_key) == NULL) {
+            continue;
+          }
+          if (tmp_key.chk_valid() == false) {
             continue;
           }
           str_to_float.clear();

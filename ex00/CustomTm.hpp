@@ -11,6 +11,9 @@ class CustomTm : public std::tm {
   ~CustomTm();
   CustomTm(const CustomTm& origin);
   CustomTm& operator=(const CustomTm& origin);
+
+  bool chk_valid(void);
+
   bool operator>(const CustomTm& comp) const;
   bool operator>=(const CustomTm& comp) const;
   bool operator<(const CustomTm& comp) const;
