@@ -58,6 +58,8 @@
 		"variant": "cpp",
 		"vector": "cpp",
 		"algorithm": "cpp",
-		"memory_resource": "cpp"
+		"memory_resource": "cpp",
+		"deque": "cpp",
+		"stack": "cpp"
 	}
 }

@@ -1,11 +1,26 @@
 {
     "configurations": [
         {
+            "name": "btc debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/btc",
+            "args": [
+                "input.txt"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "btc build"
+        },
+        {
             "name": "C/C++: g++ 활성 파일 빌드 및 디버그",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": ["input.txt"],
+            "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
