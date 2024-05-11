@@ -22,14 +22,14 @@
         },
         {
             "type": "cppbuild",
-            "label": "C/C++: g++ 활성 파일 빌드",
+            "label": "PmergeMe build",
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "${fileDirname}/*.cpp",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/PmergeMe"
             ],
             "options": {
                 "cwd": "${fileDirname}"

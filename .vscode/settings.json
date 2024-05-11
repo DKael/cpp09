@@ -60,6 +60,7 @@
 		"algorithm": "cpp",
 		"memory_resource": "cpp",
 		"deque": "cpp",
-		"stack": "cpp"
+		"stack": "cpp",
+		"list": "cpp"
 	}
 }
