@@ -1,5 +1,12 @@
 #include "PmergeMe.hpp"
 
+void PmergeMe::PmergeMe_init(void) {
+  static bool init_flag = false;
+  if (init_flag == false) {
+    init_flag = true;
+  }
+}
+
 PmergeMe::PmergeMe(const int argc, const char** argv) {
   std::stringstream str_to_num;
   int tmp_int;
@@ -10,8 +17,8 @@ PmergeMe::PmergeMe(const int argc, const char** argv) {
     if (str_to_num.fail()) {
       throw std::invalid_argument("Error: can't convert to int.");
     }
-    cont_lst.push_back(tmp_int);
     cont_vec.push_back(tmp_int);
+    cont_deq.push_back(tmp_int);
   }
 }
 
@@ -19,21 +26,18 @@ PmergeMe::~PmergeMe() { ; }
 
 void PmergeMe::merge_insertion_sort(void) {}
 
-template <typename Cont>
-void merge_sort(Cont input) {}
-
-void PmergeMe::print(void) {
-  std::vector<int>::iterator vec_head = cont_vec.begin();
-  std::vector<int>::iterator vec_tail = cont_vec.end();
-  std::list<int>::iterator lst_head = cont_lst.begin();
-  std::list<int>::iterator lst_tail = cont_lst.end();
+void PmergeMe::print(void) const {
+  std::vector<int>::const_iterator vec_head = cont_vec.begin();
+  std::vector<int>::const_iterator vec_tail = cont_vec.end();
+  std::deque<int>::const_iterator deq_head = cont_deq.begin();
+  std::deque<int>::const_iterator deq_tail = cont_deq.end();
 
   for (; vec_head != vec_tail; ++vec_head) {
     std::cout << *vec_head << ' ';
   }
   std::cout << '\n';
-  for (; lst_head != lst_tail; ++lst_head) {
-    std::cout << *lst_head << ' ';
+  for (; deq_head != deq_tail; ++deq_head) {
+    std::cout << *deq_head << ' ';
   }
   std::cout << '\n';
 }

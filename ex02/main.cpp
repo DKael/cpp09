@@ -7,6 +7,7 @@ int main(const int argc, const char** argv) {
   }
 
   try {
+    PmergeMe::PmergeMe_init();
     PmergeMe salt(argc - 1, &argv[1]);
 
     salt.print();

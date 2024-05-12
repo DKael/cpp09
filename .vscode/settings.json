@@ -61,6 +61,19 @@
 		"memory_resource": "cpp",
 		"deque": "cpp",
 		"stack": "cpp",
-		"list": "cpp"
+		"list": "cpp",
+		"__functional_03": "cpp",
+		"__tuple": "cpp",
+		"iterator": "cpp",
+		"filesystem": "cpp",
+		"functional": "cpp",
+		"memory": "cpp",
+		"utility": "cpp",
+		"type_traits": "cpp",
+		"__functional_base": "cpp",
+		"__nullptr": "cpp",
+		"__string": "cpp",
+		"bit": "cpp",
+		"chrono": "cpp"
 	}
 }
