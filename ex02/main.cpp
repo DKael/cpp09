@@ -13,6 +13,8 @@ int main(const int argc, const char** argv) {
     salt.print();
 
     salt.merge_insertion_sort();
+
+    salt.print();
   } catch (const std::exception& e) {
     std::cout << e.what() << '\n';
     exit(1);

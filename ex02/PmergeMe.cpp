@@ -17,6 +17,10 @@ void PmergeMe::PmergeMe_init(void) {
 PmergeMe::PmergeMe(const int argc, const char** argv) {
   std::stringstream str_to_num;
   int tmp_int;
+
+  origin_vec.reserve(argc);
+  buf_vec.reserve(argc);
+  buf_vec1.reserve(argc);
   for (int i = 0; i < argc; i++) {
     str_to_num.clear();
     str_to_num << argv[i];
@@ -26,8 +30,13 @@ PmergeMe::PmergeMe(const int argc, const char** argv) {
     }
     origin_vec.push_back(tmp_int);
     buf_vec.push_back(tmp_int);
+    buf_vec1.push_back(0);
+
     origin_deq.push_back(tmp_int);
   }
+  origin_vec_head = origin_vec.begin();
+  buf_vec_head = buf_vec.begin();
+  buf_vec1_head = buf_vec1.begin();
 }
 
 PmergeMe::~PmergeMe() { ; }
@@ -39,26 +48,109 @@ void PmergeMe::merge_insertion_sort(void) {
   _merge_insertion_vec(0, origin_vec.size());
 }
 
-void PmergeMe::_merge_insertion_vec(std::size_t level, std::size_t item_cnt) {
-  std::size_t idx_offset = (1UL << level);
-  std::size_t step = (idx_offset << 1);
-  std::size_t idx = 0;
-  bool is_size_odd = (item_cnt % 2UL == 1UL);
+void PmergeMe::_merge_insertion_vec(int level, int item_num) {
+  int item_size = (1 << level);
+  int pair_size = (item_size << 1);
+  int pair_num = (item_num / 2);
+  int is_size_odd = (item_num % 2);
+  int idx = 0;
 
-  for (std::size_t i = 0UL; i < (item_cnt / 2); i++) {
-    idx = i * step;
-    if (origin_vec[idx] < origin_vec[idx + idx_offset]) {
-      std::copy(origin_vec.begin() + idx + idx_offset,
-                origin_vec.begin() + idx + step, buf_vec.begin() + idx);
-      std::copy(origin_vec.begin() + idx, origin_vec.begin() + idx + idx_offset,
-                buf_vec.begin() + idx + idx_offset);
+  std::vector<int>::iterator copy_start_loc;
+
+  for (int i = 0; i < pair_num; i++) {
+    idx = i * pair_size;
+    if (origin_vec[idx] < origin_vec[idx + item_size]) {
+      copy_start_loc = origin_vec_head + idx + item_size;
+      std::copy(copy_start_loc, copy_start_loc + item_size, buf_vec_head + idx);
+      copy_start_loc = origin_vec_head + idx;
+      std::copy(copy_start_loc, copy_start_loc + item_size,
+                buf_vec_head + idx + item_size);
     }
   }
-  std::copy(buf_vec.begin(), buf_vec.begin() + (item_cnt / 2UL) * step,
-            origin_vec.begin());
-  if (item_cnt / 2UL != 1UL) {
-    _merge_insertion_vec(level + 1UL, item_cnt / 2UL);
+  std::copy(buf_vec_head, buf_vec_head + pair_num * pair_size, origin_vec_head);
+
+  if (pair_num != 1) {
+    _merge_insertion_vec(level + 1, pair_num);
   }
+
+  std::copy(origin_vec_head + item_size, origin_vec_head + pair_size,
+            buf_vec_head);
+  std::copy(origin_vec_head, origin_vec_head + item_size,
+            buf_vec_head + item_size);
+  int a_cnt = 2;
+  for (int i = 1; i < pair_num; i++) {
+    copy_start_loc = origin_vec_head + (i * pair_size);
+    std::copy(copy_start_loc, copy_start_loc + item_size,
+              buf_vec_head + ((i + 1) * item_size));
+    a_cnt++;
+    copy_start_loc = copy_start_loc + item_size;
+    std::copy(copy_start_loc, copy_start_loc + item_size,
+              buf_vec1.begin() + ((i - 1) * item_size));
+  }
+
+  int jacob_idx = 2;
+
+  while (jacobsthal_num[jacob_idx] < pair_num + is_size_odd) {
+    ++jacob_idx;
+  }
+
+  int i;
+  for (i = 3; i < jacob_idx; i++) {
+    for (std::uint64_t j = jacobsthal_num[i]; j > jacobsthal_num[i - 1]; j--) {
+      copy_start_loc = buf_vec1_head + (j - 2) * item_size;
+      int pair_Key = *copy_start_loc;
+      std::vector<int> binary_search;
+      for (int k = 0; k < jacobsthal_num[i] + jacobsthal_num[i - 1] - 1; k++) {
+        binary_search.push_back(buf_vec[k * item_size]);
+      }
+      int insertion_idx = binary_insertion_vec(pair_Key, binary_search) + 1;
+      for (int k = a_cnt * item_size - 1;
+           k >= insertion_idx * static_cast<int>(item_size); --k) {
+        buf_vec[k + item_size] = buf_vec[k];
+      }
+      std::copy(copy_start_loc, copy_start_loc + item_size,
+                buf_vec_head + insertion_idx * item_size);
+      a_cnt++;
+    }
+  }
+
+  if (is_size_odd) {
+    copy_start_loc = origin_vec_head + pair_num * pair_size;
+    int pair_Key = *copy_start_loc;
+    std::vector<int> binary_search;
+    for (int k = 0; k < a_cnt; k++) {
+      binary_search.push_back(buf_vec[k * item_size]);
+    }
+    int insertion_idx = binary_insertion_vec(pair_Key, binary_search) + 1;
+    for (int k = a_cnt * item_size - 1;
+         k >= insertion_idx * static_cast<int>(item_size); --k) {
+      buf_vec[k + item_size] = buf_vec[k];
+    }
+    std::copy(copy_start_loc, copy_start_loc + item_size,
+              buf_vec_head + insertion_idx * item_size);
+    a_cnt++;
+  }
+
+  for (int j = pair_num; j > jacobsthal_num[i - 1]; j--) {
+    copy_start_loc = buf_vec1_head + (j - 2) * item_size;
+    int pair_Key = *copy_start_loc;
+    std::vector<int> binary_search;
+    for (int k = 0; k < jacobsthal_num[i - 1] + pair_num - 1 + is_size_odd;
+         k++) {
+      binary_search.push_back(buf_vec[k * item_size]);
+    }
+    int insertion_idx = binary_insertion_vec(pair_Key, binary_search) + 1;
+    for (int k = a_cnt * item_size - 1;
+         k >= insertion_idx * static_cast<int>(item_size); --k) {
+      buf_vec[k + item_size] = buf_vec[k];
+    }
+    std::copy(copy_start_loc, copy_start_loc + item_size,
+              buf_vec_head + insertion_idx * item_size);
+    a_cnt++;
+  }
+
+  std::copy(buf_vec_head, buf_vec_head + item_num * item_size, origin_vec_head);
+  return;
 }
 
 void PmergeMe::print(void) const {
@@ -71,8 +163,27 @@ void PmergeMe::print(void) const {
     std::cout << *vec_head << ' ';
   }
   std::cout << '\n';
-  for (; deq_head != deq_tail; ++deq_head) {
-    std::cout << *deq_head << ' ';
+  // for (; deq_head != deq_tail; ++deq_head) {
+  //   std::cout << *deq_head << ' ';
+  // }
+  // std::cout << '\n';
+}
+
+long binary_insertion_vec(int target, const std::vector<int>& bs) {
+  long low = 0L;
+  long high = bs.size() - 1L;
+  long mid;
+
+  while (low <= high) {
+    mid = (low + high) / 2;
+
+    if (target < bs[mid]) {
+      high = mid - 1;
+    } else if (target > bs[mid]) {
+      low = mid + 1;
+    } else {
+      return mid;
+    }
   }
-  std::cout << '\n';
+  return high;
 }

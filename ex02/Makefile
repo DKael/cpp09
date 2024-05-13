@@ -1,4 +1,5 @@
-SRCS =	main.cpp
+SRCS =	main.cpp \
+		PmergeMe.cpp
 
 OBJDIR=obj
 
@@ -8,7 +9,7 @@ CXX = c++
 
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-NAME = btc
+NAME = PmergeMe
 
 ${NAME} : ${OBJS}
 	${CXX} ${CXXFLAGS} ${OBJS} -o $@
