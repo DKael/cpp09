@@ -1,11 +1,14 @@
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
 
-#include <ctime>
+#include <sys/time.h>
+
 #include <deque>
 #include <iostream>
 #include <sstream>
 #include <vector>
+
+#define S_TO_US 1000000
 
 class PmergeMe {
  private:
@@ -19,13 +22,19 @@ class PmergeMe {
   std::vector<int>::iterator buf_vec1_head;
 
   std::deque<int> origin_deq;
+  std::deque<int>::iterator origin_deq_head;
+  std::deque<int> buf_deq;
+  std::deque<int>::iterator buf_deq_head;
+  std::deque<int> buf_deq1;
+  std::deque<int>::iterator buf_deq1_head;
 
-  std::time_t start1;
-  std::time_t start2;
-  std::time_t end1;
-  std::time_t end2;
+  timeval start_vec;
+  timeval start_deq;
+  timeval end_vec;
+  timeval end_deq;
 
   void _merge_insertion_vec(int level, int item_cnt);
+  void _merge_insertion_deq(int level, int item_cnt);
 
   // not use
   PmergeMe(void);
@@ -38,9 +47,13 @@ class PmergeMe {
   ~PmergeMe();
 
   void merge_insertion_sort(void);
-  void print(void) const;
+  void print_vec(void) const;
+  void print_deq(void) const;
+  void print_vec_time(void) const;
+  void print_deq_time(void) const;
 };
 
 long binary_insertion_vec(int target, const std::vector<int>& bs);
-
+long binary_insertion_deq(int target, const std::deque<int>& bs);
+inline long time_calc(timeval t1, timeval t2);
 #endif

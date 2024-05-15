@@ -10,11 +10,19 @@ int main(const int argc, const char** argv) {
     PmergeMe::PmergeMe_init();
     PmergeMe salt(argc - 1, &argv[1]);
 
-    salt.print();
+    std::cout << "<Before merge insertion sort>\nstd::vector : ";
+    salt.print_vec();
+    std::cout << "std::deque  : ";
+    salt.print_deq();
 
     salt.merge_insertion_sort();
 
-    salt.print();
+    std::cout << "<After merge insertion sort>\nstd::vector : ";
+    salt.print_vec();
+    std::cout << "std::deque  : ";
+    salt.print_deq();
+    salt.print_vec_time();
+    salt.print_deq_time();
   } catch (const std::exception& e) {
     std::cout << e.what() << '\n';
     exit(1);
