@@ -22,6 +22,10 @@ PmergeMe::PmergeMe(const int argc, const char** argv) {
   buf_vec.reserve(argc);
   buf_vec1.reserve(argc);
   for (int i = 0; i < argc; i++) {
+    if (std::string(argv[i]).find_first_not_of("0123456789") !=
+        std::string::npos) {
+      throw std::invalid_argument("Error: non number input included.");
+    }
     str_to_num.clear();
     str_to_num << argv[i];
     str_to_num >> tmp_int;
@@ -52,17 +56,15 @@ PmergeMe::~PmergeMe() { ; }
 
 void PmergeMe::merge_insertion_sort(void) {
   gettimeofday(&start_vec, NULL);
-  if (origin_vec.size() < 2) {
-    return;
+  if (origin_vec.size() >= 2) {
+    _merge_insertion_vec(0, origin_vec.size());
   }
-  _merge_insertion_vec(0, origin_vec.size());
   gettimeofday(&end_vec, NULL);
 
   gettimeofday(&start_deq, NULL);
-  if (origin_deq.size() < 2) {
-    return;
+  if (origin_deq.size() >= 2) {
+    _merge_insertion_deq(0, origin_deq.size());
   }
-  _merge_insertion_deq(0, origin_deq.size());
   gettimeofday(&end_deq, NULL);
 }
 
